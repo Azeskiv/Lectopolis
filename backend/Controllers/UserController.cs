@@ -35,7 +35,12 @@ namespace backend.Controllers
             if (existing == null)
                 return Unauthorized("Login incorrecto.");
 
-            return Ok(new { message = "Iniciando sesión..." });
+            return Ok(new
+            {
+                message = "Iniciando sesión...",
+                userId = existing.Id,
+                username = existing.Username
+            });
         }
     }
 }
