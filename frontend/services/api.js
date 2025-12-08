@@ -131,3 +131,20 @@ export const deleteRating = async (ratingId) => {
     throw error;
   }
 };
+
+// Obtener recomendaciones personalizadas
+export const getRecommendations = async (userId) => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/recommendations/${userId}`, {
+      method: "GET",
+      headers: {
+        "Authorization": `Bearer ${authToken}`
+      }
+    });
+    if (!response.ok) throw new Error("Error al obtener recomendaciones");
+    return await response.json();
+  } catch (error) {
+    console.error("Error en getRecommendations:", error);
+    throw error;
+  }
+};
