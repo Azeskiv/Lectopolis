@@ -1,7 +1,9 @@
 using backend.Data;
 using backend.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace backend.Controllers
 {
@@ -18,16 +20,15 @@ namespace backend.Controllers
 
         // POST: api/ratings - Crear valoración
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> CreateRating([FromBody] RatingRequest request)
         {
-            // Verificar si el usuario existe
-            var userExists = await _context.Users.AnyAsync(u => u.Id == request.UserId);
-            if (!userExists)
-                return BadRequest("El usuario no existe.");
+            // Obtener userId del token JWT
+            var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value!);
 
             // Verificar si ya valoró este libro
             var existingRating = await _context.Ratings
-                .FirstOrDefaultAsync(r => r.BookId == request.BookId && r.UserId == request.UserId);
+                .FirstOrDefaultAsync(r => r.BookId == request.BookId && r.UserId == userId);
 
             if (existingRating != null)
                 return BadRequest("Ya has valorado este libro.");
@@ -35,7 +36,7 @@ namespace backend.Controllers
             var rating = new Rating
             {
                 BookId = request.BookId,
-                UserId = request.UserId,
+                UserId = userId, // Extraído del token, no del request
                 Score = request.Score,
                 Comment = request.Comment,
                 CreatedAt = DateTime.UtcNow
@@ -47,7 +48,7 @@ namespace backend.Controllers
             return Ok(new { message = "Valoración creada correctamente", rating });
         }
 
-        // GET: api/ratings/{bookId} - Obtener valoraciones de un libro
+        // GET: api/ratings/{bookId} - Obtener valoraciones de un libro (público)
         [HttpGet("{bookId}")]
         public async Task<IActionResult> GetRatings(string bookId)
         {
@@ -77,13 +78,20 @@ namespace backend.Controllers
             });
         }
 
-        // PUT: api/ratings/{id} - Actualizar valoración
+        // PUT: api/ratings/{id} - Actualizar valoración (solo el dueño)
         [HttpPut("{id}")]
+        [Authorize]
         public async Task<IActionResult> UpdateRating(int id, [FromBody] UpdateRatingRequest request)
         {
+            var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value!);
+
             var rating = await _context.Ratings.FindAsync(id);
             if (rating == null)
                 return NotFound("Valoración no encontrada.");
+
+            // Verificar que el usuario sea el dueño de la valoración
+            if (rating.UserId != userId)
+                return Forbid("No tienes permiso para editar esta valoración.");
 
             rating.Score = request.Score;
             rating.Comment = request.Comment;
@@ -93,13 +101,20 @@ namespace backend.Controllers
             return Ok(new { message = "Valoración actualizada correctamente", rating });
         }
 
-        // DELETE: api/ratings/{id} - Eliminar valoración
+        // DELETE: api/ratings/{id} - Eliminar valoración (solo el dueño)
         [HttpDelete("{id}")]
+        [Authorize]
         public async Task<IActionResult> DeleteRating(int id)
         {
+            var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value!);
+
             var rating = await _context.Ratings.FindAsync(id);
             if (rating == null)
                 return NotFound("Valoración no encontrada.");
+
+            // Verificar que el usuario sea el dueño de la valoración
+            if (rating.UserId != userId)
+                return Forbid("No tienes permiso para eliminar esta valoración.");
 
             _context.Ratings.Remove(rating);
             await _context.SaveChangesAsync();
@@ -112,7 +127,7 @@ namespace backend.Controllers
     public class RatingRequest
     {
         public string BookId { get; set; } = string.Empty;
-        public int UserId { get; set; }
+        // UserId ya no viene del request, se extrae del token
         public int Score { get; set; }
         public string? Comment { get; set; }
     }

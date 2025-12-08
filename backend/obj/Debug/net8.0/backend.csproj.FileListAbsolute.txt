@@ -134,3 +134,13 @@ K:\Lectopolis\backend\obj\Debug\net8.0\backend.genruntimeconfig.cache
 K:\Lectopolis\backend\obj\Debug\net8.0\ref\backend.dll
 K:\Lectopolis\backend\bin\Debug\net8.0\Dapper.dll
 K:\Lectopolis\backend\bin\Debug\net8.0\Postgres.NET.dll
+K:\Lectopolis\backend\obj\Debug\net8.0\backend.sourcelink.json
+K:\Lectopolis\backend\bin\Debug\net8.0\BCrypt.Net-Next.dll
+K:\Lectopolis\backend\bin\Debug\net8.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+K:\Lectopolis\backend\bin\Debug\net8.0\Microsoft.IdentityModel.Abstractions.dll
+K:\Lectopolis\backend\bin\Debug\net8.0\Microsoft.IdentityModel.JsonWebTokens.dll
+K:\Lectopolis\backend\bin\Debug\net8.0\Microsoft.IdentityModel.Logging.dll
+K:\Lectopolis\backend\bin\Debug\net8.0\Microsoft.IdentityModel.Protocols.dll
+K:\Lectopolis\backend\bin\Debug\net8.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+K:\Lectopolis\backend\bin\Debug\net8.0\Microsoft.IdentityModel.Tokens.dll
+K:\Lectopolis\backend\bin\Debug\net8.0\System.IdentityModel.Tokens.Jwt.dll
