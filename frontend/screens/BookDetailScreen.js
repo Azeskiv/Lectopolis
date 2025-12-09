@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import { getBookRatings, createRating, updateRating, deleteRating } from '../services/api';
 
-export default function BookDetailScreen({ book, user, onBack }) {
+export default function BookDetailScreen({ book, user, onBack, onViewProfile }) {
   const [ratings, setRatings] = useState([]);
   const [average, setAverage] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -219,7 +219,9 @@ export default function BookDetailScreen({ book, user, onBack }) {
             ratings.map((rating) => (
               <View key={rating.id} style={styles.ratingCard}>
                 <View style={styles.ratingHeader}>
-                  <Text style={styles.ratingUser}>{rating.usuario}</Text>
+                  <TouchableOpacity onPress={() => onViewProfile && onViewProfile(rating.userId)}>
+                    <Text style={styles.ratingUser}>{rating.usuario}</Text>
+                  </TouchableOpacity>
                   <View style={styles.starsRowSmall}>
                     {[1, 2, 3, 4, 5].map((s) => (
                       <Text key={s} style={styles.starSmall}>
@@ -483,6 +485,7 @@ const styles = StyleSheet.create({
     fontSize: 17,
     fontWeight: '700',
     color: '#8B4513',
+    textDecorationLine: 'underline',
   },
   starsRowSmall: {
     flexDirection: 'row',

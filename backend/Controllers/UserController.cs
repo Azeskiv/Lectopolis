@@ -6,6 +6,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Authorization;
 
 namespace backend.Controllers
 {
@@ -60,8 +61,98 @@ namespace backend.Controllers
                 message = "Inicio de sesión exitoso",
                 token = token,
                 userId = user.Id,
-                username = user.Username
+                username = user.Username,
+                preferredLanguages = user.PreferredLanguages,
+                profilePicture = user.ProfilePicture,
+                bio = user.Bio
             });
+        }
+
+        // GET: api/users/{userId}/languages
+        [HttpGet("{userId}/languages")]
+        [Authorize]
+        public async Task<IActionResult> GetLanguages(int userId)
+        {
+            var requestingUserId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value!);
+            if (requestingUserId != userId)
+                return Forbid();
+
+            var user = await _context.Users.FindAsync(userId);
+            if (user == null)
+                return NotFound("Usuario no encontrado");
+
+            return Ok(new { preferredLanguages = user.PreferredLanguages });
+        }
+
+        // PUT: api/users/{userId}/languages
+        [HttpPut("{userId}/languages")]
+        [Authorize]
+        public async Task<IActionResult> UpdateLanguages(int userId, [FromBody] LanguageUpdateRequest request)
+        {
+            var requestingUserId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value!);
+            if (requestingUserId != userId)
+                return Forbid();
+
+            var user = await _context.Users.FindAsync(userId);
+            if (user == null)
+                return NotFound("Usuario no encontrado");
+
+            user.PreferredLanguages = request.PreferredLanguages;
+            await _context.SaveChangesAsync();
+
+            return Ok(new { message = "Preferencias actualizadas", preferredLanguages = user.PreferredLanguages });
+        }
+
+        // GET: api/users/{userId}/profile
+        [HttpGet("{userId}/profile")]
+        public async Task<IActionResult> GetUserProfile(int userId)
+        {
+            var user = await _context.Users.FindAsync(userId);
+            if (user == null)
+                return NotFound("Usuario no encontrado");
+
+            // Obtener valoraciones del usuario
+            var ratings = await _context.Ratings
+                .Where(r => r.UserId == userId)
+                .OrderByDescending(r => r.CreatedAt)
+                .ToListAsync();
+
+            return Ok(new
+            {
+                userId = user.Id,
+                username = user.Username,
+                profilePicture = user.ProfilePicture,
+                bio = user.Bio,
+                ratingsCount = ratings.Count,
+                ratings = ratings.Select(r => new
+                {
+                    id = r.Id,
+                    bookId = r.BookId,
+                    score = r.Score,
+                    comment = r.Comment,
+                    createdAt = r.CreatedAt
+                })
+            });
+        }
+
+        // PUT: api/users/{userId}/profile
+        [HttpPut("{userId}/profile")]
+        [Authorize]
+        public async Task<IActionResult> UpdateUserProfile(int userId, [FromBody] ProfileUpdateRequest request)
+        {
+            var requestingUserId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value!);
+            if (requestingUserId != userId)
+                return Forbid();
+
+            var user = await _context.Users.FindAsync(userId);
+            if (user == null)
+                return NotFound("Usuario no encontrado");
+
+            user.ProfilePicture = request.ProfilePicture;
+            user.Bio = request.Bio;
+            await _context.SaveChangesAsync();
+
+            return Ok(new { message = "Perfil actualizado", profilePicture = user.ProfilePicture, bio = user.Bio });
         }
 
         private string GenerateJwtToken(User user)
@@ -105,5 +196,16 @@ namespace backend.Controllers
     {
         public string Username { get; set; } = string.Empty;
         public string Password { get; set; } = string.Empty;
+    }
+
+    public class LanguageUpdateRequest
+    {
+        public string PreferredLanguages { get; set; } = string.Empty;
+    }
+
+    public class ProfileUpdateRequest
+    {
+        public string? ProfilePicture { get; set; }
+        public string? Bio { get; set; }
     }
 }

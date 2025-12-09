@@ -19,12 +19,15 @@ namespace backend.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Search([FromQuery] string query)
+        public async Task<IActionResult> Search([FromQuery] string query, [FromQuery] string? languages = null)
         {
             if (string.IsNullOrWhiteSpace(query))
                 return BadRequest("Debes proporcionar un término de búsqueda.");
 
-            var url = $"https://www.googleapis.com/books/v1/volumes?q={Uri.EscapeDataString(query)}";
+            // Si no se especifican idiomas, usar español por defecto
+            var langFilter = string.IsNullOrWhiteSpace(languages) ? "es" : languages;
+            
+            var url = $"https://www.googleapis.com/books/v1/volumes?q={Uri.EscapeDataString(query)}&langRestrict={langFilter}&maxResults=40";
             var response = await _httpClient.GetAsync(url);
 
             if (!response.IsSuccessStatusCode)
@@ -37,6 +40,7 @@ namespace backend.Controllers
                 return Ok(new { books = new List<object>() });
 
             var books = new List<object>();
+            var seenBooks = new HashSet<string>(); // Para evitar duplicados
 
             foreach (var item in items.EnumerateArray())
             {
@@ -50,6 +54,16 @@ namespace backend.Controllers
                 var authors = volumeInfo.TryGetProperty("authors", out var authorsProp)
                     ? string.Join(", ", authorsProp.EnumerateArray().Select(a => a.GetString()))
                     : "Autor desconocido";
+
+                // Crear clave única con título + primer autor para detectar duplicados
+                var firstAuthor = authors.Split(',')[0].Trim();
+                var bookKey = $"{title?.ToLower()}|{firstAuthor.ToLower()}";
+                
+                // Saltar si ya existe este libro
+                if (seenBooks.Contains(bookKey))
+                    continue;
+                
+                seenBooks.Add(bookKey);
 
                 var description = volumeInfo.TryGetProperty("description", out var descProp)
                     ? descProp.GetString() : "Sin descripción disponible";

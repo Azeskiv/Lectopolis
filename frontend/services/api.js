@@ -15,9 +15,13 @@ export const clearAuthToken = () => {
 };
 
 // Búsqueda de libros
-export const searchBooks = async (query) => {
+export const searchBooks = async (query, languages = null) => {
   try {
-    const response = await fetch(`${API_BASE_URL}/books?query=${encodeURIComponent(query)}`);
+    let url = `${API_BASE_URL}/books?query=${encodeURIComponent(query)}`;
+    if (languages) {
+      url += `&languages=${encodeURIComponent(languages)}`;
+    }
+    const response = await fetch(url);
     if (!response.ok) throw new Error("Error al buscar libros");
     const data = await response.json();
     return data.books;
@@ -145,6 +149,73 @@ export const getRecommendations = async (userId) => {
     return await response.json();
   } catch (error) {
     console.error("Error en getRecommendations:", error);
+    throw error;
+  }
+};
+
+// Obtener preferencias de idioma
+export const getLanguagePreferences = async (userId) => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/users/${userId}/languages`, {
+      method: "GET",
+      headers: {
+        "Authorization": `Bearer ${authToken}`
+      }
+    });
+    if (!response.ok) throw new Error("Error al obtener preferencias");
+    return await response.json();
+  } catch (error) {
+    console.error("Error en getLanguagePreferences:", error);
+    throw error;
+  }
+};
+
+// Actualizar preferencias de idioma
+export const updateLanguagePreferences = async (userId, languages) => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/users/${userId}/languages`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${authToken}`
+      },
+      body: JSON.stringify({ preferredLanguages: languages })
+    });
+    if (!response.ok) throw new Error("Error al actualizar preferencias");
+    return await response.json();
+  } catch (error) {
+    console.error("Error en updateLanguagePreferences:", error);
+    throw error;
+  }
+};
+
+// Obtener perfil de usuario
+export const getUserProfile = async (userId) => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/users/${userId}/profile`);
+    if (!response.ok) throw new Error("Error al obtener perfil");
+    return await response.json();
+  } catch (error) {
+    console.error("Error en getUserProfile:", error);
+    throw error;
+  }
+};
+
+// Actualizar perfil de usuario
+export const updateUserProfile = async (userId, profilePicture, bio) => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/users/${userId}/profile`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${authToken}`
+      },
+      body: JSON.stringify({ profilePicture, bio })
+    });
+    if (!response.ok) throw new Error("Error al actualizar perfil");
+    return await response.json();
+  } catch (error) {
+    console.error("Error en updateUserProfile:", error);
     throw error;
   }
 };

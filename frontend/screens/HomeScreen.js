@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -10,12 +10,32 @@ import {
   ActivityIndicator,
   Alert,
 } from 'react-native';
-import { searchBooks } from '../services/api';
+import { searchBooks, getLanguagePreferences } from '../services/api';
 
-export default function HomeScreen({ user, onLogout, onSelectBook, onShowRecommendations }) {
+export default function HomeScreen({ user, onLogout, onSelectBook, onShowRecommendations, onShowSettings, onViewProfile }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [books, setBooks] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [userLanguages, setUserLanguages] = useState('es');
+
+  useEffect(() => {
+    // Usar idiomas del usuario si ya los tiene del login
+    if (user.preferredLanguages) {
+      setUserLanguages(user.preferredLanguages);
+    } else {
+      loadUserLanguages();
+    }
+  }, []);
+
+  const loadUserLanguages = async () => {
+    try {
+      const data = await getLanguagePreferences(user.id);
+      setUserLanguages(data.preferredLanguages || 'es');
+    } catch (error) {
+      console.error('Error al cargar idiomas:', error);
+      setUserLanguages('es');
+    }
+  };
 
   const handleSearch = async () => {
     if (!searchQuery.trim()) {
@@ -25,7 +45,7 @@ export default function HomeScreen({ user, onLogout, onSelectBook, onShowRecomme
 
     setLoading(true);
     try {
-      const results = await searchBooks(searchQuery);
+      const results = await searchBooks(searchQuery, userLanguages);
       setBooks(results);
       if (results.length === 0) {
         Alert.alert('Sin resultados', 'No se encontraron libros');
@@ -72,13 +92,18 @@ export default function HomeScreen({ user, onLogout, onSelectBook, onShowRecomme
     <View style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
-        <View>
+        <TouchableOpacity onPress={() => onViewProfile(user.id)}>
           <Text style={styles.headerTitle}>📚 Lectopolis</Text>
-          <Text style={styles.headerSubtitle}>Hola, {user.username}</Text>
-        </View>
-        <TouchableOpacity onPress={onLogout} style={styles.logoutButton}>
-          <Text style={styles.logoutText}>Salir</Text>
+          <Text style={styles.headerSubtitle}>Hola, {user.username} 👤</Text>
         </TouchableOpacity>
+        <View style={styles.headerButtons}>
+          <TouchableOpacity onPress={onShowSettings} style={styles.settingsButton}>
+            <Text style={styles.settingsText}>⚙️</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={onLogout} style={styles.logoutButton}>
+            <Text style={styles.logoutText}>Salir</Text>
+          </TouchableOpacity>
+        </View>
       </View>
 
       {/* Search Bar */}
@@ -160,6 +185,20 @@ const styles = StyleSheet.create({
     opacity: 0.9,
     marginTop: 5,
     fontStyle: 'italic',
+  },
+  headerButtons: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+  },
+  settingsButton: {
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    paddingHorizontal: 12,
+    paddingVertical: 10,
+    borderRadius: 8,
+  },
+  settingsText: {
+    fontSize: 22,
   },
   logoutButton: {
     backgroundColor: 'rgba(255,255,255,0.25)',

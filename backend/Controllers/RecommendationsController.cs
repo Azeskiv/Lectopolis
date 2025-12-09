@@ -95,7 +95,10 @@ namespace backend.Controllers
             var client = _httpClientFactory.CreateClient();
             client.DefaultRequestHeaders.Add("Authorization", $"Bearer {groqApiKey}");
 
-            var systemPrompt = @"Eres un experto bibliotecario y crítico literario. Tu tarea es recomendar 5 libros basándote en el historial de lectura del usuario.
+            // Generar un seed único basado en la hora actual para variedad
+            var randomSeed = DateTime.UtcNow.Ticks % 1000;
+
+            var systemPrompt = @"Eres un experto bibliotecario y crítico literario. Tu tarea es recomendar 5 libros DIFERENTES basándote en el historial de lectura del usuario.
 
 IMPORTANTE: Responde ÚNICAMENTE con un JSON válido con este formato exacto:
 {
@@ -109,9 +112,11 @@ IMPORTANTE: Responde ÚNICAMENTE con un JSON válido con este formato exacto:
 }
 
 Reglas:
-- Exactamente 5 libros
+- Exactamente 5 libros DIFERENTES cada vez
 - Libros reales que existen
-- Variedad de géneros pero relacionados con sus gustos
+- Varía entre géneros: ficción, no ficción, clásicos, contemporáneos
+- NO repitas las mismas recomendaciones siempre
+- Explora diferentes estilos literarios relacionados con sus gustos
 - Explicaciones personalizadas basadas en sus valoraciones
 - Solo JSON, sin texto adicional";
 
@@ -119,7 +124,8 @@ Reglas:
 
 {userRatingsText}
 
-Recomienda 5 libros que le puedan gustar. Responde SOLO con el JSON.";
+Recomienda 5 libros VARIADOS que le puedan gustar. Busca diversidad en géneros y épocas. Número aleatorio para variedad: {randomSeed}
+Responde SOLO con el JSON.";
 
             var requestBody = new
             {
@@ -129,8 +135,9 @@ Recomienda 5 libros que le puedan gustar. Responde SOLO con el JSON.";
                     new { role = "system", content = systemPrompt },
                     new { role = "user", content = userPrompt }
                 },
-                temperature = 0.7,
-                max_tokens = 1000
+                temperature = 0.9, // Aumentar temperatura para más variedad
+                max_tokens = 1000,
+                top_p = 0.95 // Añadir top_p para mayor diversidad
             };
 
             try

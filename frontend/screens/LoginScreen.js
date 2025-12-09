@@ -37,7 +37,13 @@ export default function LoginScreen({ onLogin }) {
         // Guardar el token para peticiones autenticadas
         setAuthToken(response.token);
         Alert.alert('¡Éxito!', 'Has iniciado sesión correctamente');
-        onLogin({ id: response.userId, username: response.username });
+        onLogin({ 
+          id: response.userId, 
+          username: response.username,
+          preferredLanguages: response.preferredLanguages || 'es',
+          profilePicture: response.profilePicture,
+          bio: response.bio
+        });
       } else {
         await register(username, password);
         Alert.alert('¡Éxito!', 'Usuario registrado. Ahora puedes iniciar sesión');

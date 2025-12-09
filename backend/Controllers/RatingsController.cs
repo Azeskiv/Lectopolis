@@ -58,6 +58,7 @@ namespace backend.Controllers
                 .Select(r => new
                 {
                     r.Id,
+                    r.UserId,
                     r.Score,
                     r.Comment,
                     r.CreatedAt,

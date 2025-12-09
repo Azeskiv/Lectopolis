@@ -1,10 +1,10 @@
 # PROYECTO DE DESARROLLO DE APLICACIONES MULTIPLATAFORMA
 
 **Título del Proyecto:** Lectopolis - Plataforma Social de Gestión y Valoración de Libros  
-**Autor:** [Tu Nombre]  
+**Autor:** Alfonso Casado Jareño  
 **Año Académico:** 2025-2026  
 **Ciclo Formativo:** Desarrollo de Aplicaciones Multiplataforma  
-**Centro:** [Nombre del Centro]
+**Centro:** IES GREGORIO PRIETO
 
 ---
 
