@@ -91,7 +91,12 @@ namespace backend.Controllers
 
         private async Task<List<RecommendationResult>> GetAIRecommendations(string userRatingsText)
         {
-            var groqApiKey = _configuration["Groq:ApiKey"] ?? "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";
+            var groqApiKey = _configuration["Groq:ApiKey"];
+            if (string.IsNullOrEmpty(groqApiKey))
+            {
+                throw new InvalidOperationException("Groq API key no está configurada en appsettings.json");
+            }
+            
             var client = _httpClientFactory.CreateClient();
             client.DefaultRequestHeaders.Add("Authorization", $"Bearer {groqApiKey}");
 
