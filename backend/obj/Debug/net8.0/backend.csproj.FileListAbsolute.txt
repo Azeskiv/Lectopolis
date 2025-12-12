@@ -144,3 +144,4 @@ K:\Lectopolis\backend\bin\Debug\net8.0\Microsoft.IdentityModel.Protocols.dll
 K:\Lectopolis\backend\bin\Debug\net8.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
 K:\Lectopolis\backend\bin\Debug\net8.0\Microsoft.IdentityModel.Tokens.dll
 K:\Lectopolis\backend\bin\Debug\net8.0\System.IdentityModel.Tokens.Jwt.dll
+K:\Lectopolis\backend\bin\Debug\net8.0\appsettings.example.json
