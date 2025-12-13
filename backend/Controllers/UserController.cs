@@ -29,7 +29,6 @@ namespace backend.Controllers
             if (await _context.Users.AnyAsync(u => u.Username == request.Username))
                 return BadRequest("Este usuario ya existe.");
 
-            // Hash de la contraseña
             var passwordHash = BCrypt.Net.BCrypt.HashPassword(request.Password);
 
             var user = new User
@@ -53,7 +52,6 @@ namespace backend.Controllers
             if (user == null || !BCrypt.Net.BCrypt.Verify(request.Password, user.Password))
                 return Unauthorized("Credenciales incorrectas.");
 
-            // Generar token JWT
             var token = GenerateJwtToken(user);
 
             return Ok(new
@@ -68,7 +66,6 @@ namespace backend.Controllers
             });
         }
 
-        // GET: api/users/{userId}/languages
         [HttpGet("{userId}/languages")]
         [Authorize]
         public async Task<IActionResult> GetLanguages(int userId)
@@ -84,7 +81,6 @@ namespace backend.Controllers
             return Ok(new { preferredLanguages = user.PreferredLanguages });
         }
 
-        // PUT: api/users/{userId}/languages
         [HttpPut("{userId}/languages")]
         [Authorize]
         public async Task<IActionResult> UpdateLanguages(int userId, [FromBody] LanguageUpdateRequest request)
@@ -103,7 +99,6 @@ namespace backend.Controllers
             return Ok(new { message = "Preferencias actualizadas", preferredLanguages = user.PreferredLanguages });
         }
 
-        // GET: api/users/{userId}/profile
         [HttpGet("{userId}/profile")]
         public async Task<IActionResult> GetUserProfile(int userId)
         {
@@ -111,7 +106,6 @@ namespace backend.Controllers
             if (user == null)
                 return NotFound("Usuario no encontrado");
 
-            // Obtener valoraciones del usuario
             var ratings = await _context.Ratings
                 .Where(r => r.UserId == userId)
                 .OrderByDescending(r => r.CreatedAt)
@@ -135,7 +129,6 @@ namespace backend.Controllers
             });
         }
 
-        // PUT: api/users/{userId}/profile
         [HttpPut("{userId}/profile")]
         [Authorize]
         public async Task<IActionResult> UpdateUserProfile(int userId, [FromBody] ProfileUpdateRequest request)
@@ -185,7 +178,6 @@ namespace backend.Controllers
         }
     }
 
-    // DTOs
     public class RegisterRequest
     {
         public string Username { get; set; } = string.Empty;

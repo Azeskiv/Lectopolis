@@ -3,12 +3,14 @@ import {
   View,
   Text,
   TouchableOpacity,
-  StyleSheet,
   ScrollView,
   ActivityIndicator,
   Alert,
 } from 'react-native';
 import { getLanguagePreferences, updateLanguagePreferences } from '../services/api';
+import styles from '../styles/settingsStyles';
+import GlobalView from '../components/GlobalView';
+import PrimaryButton from '../components/PrimaryButton';
 
 const EUROPEAN_LANGUAGES = [
   { code: 'es', name: 'Español', flag: '🇪🇸' },
@@ -29,7 +31,7 @@ const EUROPEAN_LANGUAGES = [
   { code: 'ro', name: 'Rumano', flag: '🇷🇴' },
 ];
 
-export default function SettingsScreen({ user, onBack }) {
+export default function SettingsScreen({ user, onBack, onLanguagesUpdated }) {
   const [selectedLanguages, setSelectedLanguages] = useState(['es']);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -70,6 +72,12 @@ export default function SettingsScreen({ user, onBack }) {
       setSaving(true);
       const languagesString = selectedLanguages.join(',');
       await updateLanguagePreferences(user.id, languagesString);
+      
+      // Notificar al componente padre que los idiomas fueron actualizados
+      if (onLanguagesUpdated) {
+        onLanguagesUpdated(languagesString);
+      }
+      
       Alert.alert('Éxito', 'Preferencias de idioma guardadas correctamente');
     } catch (error) {
       Alert.alert('Error', 'No se pudieron guardar las preferencias');
@@ -80,15 +88,7 @@ export default function SettingsScreen({ user, onBack }) {
   };
 
   return (
-    <View style={styles.container}>
-      {/* Header */}
-      <View style={styles.header}>
-        <TouchableOpacity onPress={onBack} style={styles.backButton}>
-          <Text style={styles.backText}>← Volver</Text>
-        </TouchableOpacity>
-      </View>
-
-      {/* Título */}
+    <GlobalView title={'⚙️ Configuración de Idiomas'} subtitle={'Selecciona los idiomas en los que quieres buscar libros'} onBack={onBack} loading={loading}>
       <View style={styles.titleContainer}>
         <Text style={styles.title}>⚙️ Configuración de Idiomas</Text>
         <Text style={styles.subtitle}>
@@ -96,13 +96,8 @@ export default function SettingsScreen({ user, onBack }) {
         </Text>
       </View>
 
-      {loading ? (
-        <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color="#D4AF37" />
-          <Text style={styles.loadingText}>Cargando preferencias...</Text>
-        </View>
-      ) : (
-        <ScrollView style={styles.scrollView} contentContainerStyle={styles.scrollContent}>
+      {!loading && (
+        <>
           <View style={styles.infoBox}>
             <Text style={styles.infoText}>
               💡 Los libros se buscarán en los idiomas seleccionados.
@@ -142,186 +137,13 @@ export default function SettingsScreen({ user, onBack }) {
             </Text>
           </View>
 
-          <TouchableOpacity
-            style={styles.saveButton}
-            onPress={handleSave}
-            disabled={saving}
-          >
-            {saving ? (
-              <ActivityIndicator color="#FFF" />
-            ) : (
-              <Text style={styles.saveButtonText}>💾 Guardar preferencias</Text>
-            )}
-          </TouchableOpacity>
-        </ScrollView>
+          <PrimaryButton onPress={handleSave} loading={saving}>
+            💾 Guardar preferencias
+          </PrimaryButton>
+        </>
       )}
-    </View>
+    </GlobalView>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#F8F4E8',
-  },
-  header: {
-    backgroundColor: '#8B4513',
-    padding: 15,
-    paddingTop: 50,
-    borderBottomWidth: 3,
-    borderBottomColor: '#D4AF37',
-  },
-  backButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  backText: {
-    color: '#FFF',
-    fontSize: 18,
-    fontWeight: '700',
-  },
-  titleContainer: {
-    padding: 20,
-    backgroundColor: '#FFF',
-    borderBottomWidth: 1,
-    borderBottomColor: '#E8DCC4',
-  },
-  title: {
-    fontSize: 26,
-    fontWeight: 'bold',
-    color: '#8B4513',
-    marginBottom: 8,
-    textAlign: 'center',
-  },
-  subtitle: {
-    fontSize: 15,
-    color: '#A0826D',
-    textAlign: 'center',
-  },
-  loadingContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 40,
-  },
-  loadingText: {
-    marginTop: 20,
-    fontSize: 16,
-    color: '#8B4513',
-  },
-  scrollView: {
-    flex: 1,
-  },
-  scrollContent: {
-    padding: 20,
-  },
-  infoBox: {
-    backgroundColor: '#FFF9E6',
-    padding: 15,
-    borderRadius: 12,
-    borderLeftWidth: 4,
-    borderLeftColor: '#D4AF37',
-    marginBottom: 20,
-  },
-  infoText: {
-    fontSize: 14,
-    color: '#5A4A3A',
-    lineHeight: 20,
-  },
-  languagesContainer: {
-    gap: 12,
-  },
-  languageCard: {
-    backgroundColor: '#FFF',
-    borderRadius: 12,
-    padding: 16,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    borderWidth: 2,
-    borderColor: '#E8DCC4',
-    shadowColor: '#8B4513',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 2,
-  },
-  languageCardSelected: {
-    borderColor: '#D4AF37',
-    backgroundColor: '#FFFEF8',
-  },
-  languageContent: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    flex: 1,
-  },
-  flag: {
-    fontSize: 32,
-    marginRight: 15,
-  },
-  languageInfo: {
-    flex: 1,
-  },
-  languageName: {
-    fontSize: 17,
-    fontWeight: '600',
-    color: '#4A3728',
-    marginBottom: 4,
-  },
-  languageNameSelected: {
-    color: '#8B4513',
-    fontWeight: '700',
-  },
-  languageCode: {
-    fontSize: 12,
-    color: '#A0826D',
-    fontWeight: '500',
-  },
-  checkbox: {
-    width: 28,
-    height: 28,
-    borderRadius: 6,
-    borderWidth: 2,
-    borderColor: '#E8DCC4',
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#FFF',
-  },
-  checkboxSelected: {
-    backgroundColor: '#D4AF37',
-    borderColor: '#D4AF37',
-  },
-  checkmark: {
-    color: '#FFF',
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-  selectedInfo: {
-    marginTop: 20,
-    marginBottom: 10,
-    alignItems: 'center',
-  },
-  selectedCount: {
-    fontSize: 15,
-    color: '#8B4513',
-    fontWeight: '600',
-  },
-  saveButton: {
-    backgroundColor: '#8B4513',
-    padding: 18,
-    borderRadius: 12,
-    alignItems: 'center',
-    marginTop: 10,
-    marginBottom: 20,
-    shadowColor: '#8B4513',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 6,
-    elevation: 5,
-  },
-  saveButtonText: {
-    color: '#FFF',
-    fontSize: 17,
-    fontWeight: '700',
-  },
-});
+// styles are now imported from ../styles/settingsStyles

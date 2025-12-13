@@ -1,0 +1,136 @@
+import { StyleSheet } from 'react-native';
+
+export const colors = {
+  primary: '#8B4513',    
+  secondary: '#D4AF37',   
+  background: '#F8F4E8',   
+  cardBackground: '#FFF',
+  text: '#2C1810',
+  textSecondary: '#5A4A3A',
+  textLight: '#A0826D',
+  border: '#E8DCC8',
+  error: '#D32F2F',
+  success: '#388E3C',
+  star: '#FFD700',
+};
+
+export const commonStyles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: colors.background,
+  },
+  header: {
+    backgroundColor: colors.primary,
+    paddingVertical: 20,
+    paddingHorizontal: 20,
+    paddingTop: 50,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  headerTitle: {
+    fontSize: 18,
+    fontWeight: '700',
+    color: colors.secondary,
+  },
+  headerSubtitle: {
+    fontSize: 14,
+    color: '#FFF',
+    marginTop: 2,
+  },
+  backButton: {
+    padding: 5,
+  },
+  backText: {
+    fontSize: 18,
+    color: '#FFF',
+    fontWeight: '600',
+  },
+  card: {
+    backgroundColor: colors.cardBackground,
+    borderRadius: 12,
+    padding: 16,
+    marginBottom: 16,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  button: {
+    backgroundColor: colors.secondary,
+    paddingVertical: 14,
+    borderRadius: 8,
+    alignItems: 'center',
+    marginTop: 12,
+  },
+  buttonText: {
+    color: '#FFF',
+    fontSize: 17,
+    fontWeight: '700',
+  },
+  secondaryButton: {
+    backgroundColor: colors.background,
+    borderWidth: 2,
+    borderColor: colors.primary,
+    paddingVertical: 14,
+    borderRadius: 8,
+    alignItems: 'center',
+    marginTop: 12,
+  },
+  secondaryButtonText: {
+    color: colors.primary,
+    fontSize: 17,
+    fontWeight: '700',
+  },
+  title: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    color: colors.primary,
+    marginBottom: 8,
+  },
+  subtitle: {
+    fontSize: 16,
+    color: colors.textSecondary,
+    lineHeight: 24,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 40,
+  },
+  loadingText: {
+    marginTop: 16,
+    fontSize: 17,
+    color: colors.textSecondary,
+    textAlign: 'center',
+  },
+  emptyContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 40,
+  },
+  emptyEmoji: {
+    fontSize: 80,
+    marginBottom: 20,
+  },
+  emptyTitle: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: colors.primary,
+    marginBottom: 12,
+  },
+  emptyText: {
+    fontSize: 17,
+    color: colors.textSecondary,
+    textAlign: 'center',
+    lineHeight: 24,
+  },
+});

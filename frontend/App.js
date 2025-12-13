@@ -22,7 +22,7 @@ export default function App() {
   };
 
   const handleLogout = () => {
-    clearAuthToken(); // Limpiar token al cerrar sesión
+    clearAuthToken();
     setUser(null);
     setSelectedBook(null);
     setShowRecommendations(false);
@@ -88,7 +88,6 @@ export default function App() {
     setUser(updatedUser);
   };
 
-  // Si no hay usuario, mostrar login
   if (!user) {
     return (
       <>
@@ -98,7 +97,6 @@ export default function App() {
     );
   }
 
-  // Si se están mostrando recomendaciones
   if (showRecommendations) {
     return (
       <>
@@ -112,20 +110,19 @@ export default function App() {
     );
   }
 
-  // Si se está mostrando configuración
   if (showSettings) {
     return (
       <>
         <SettingsScreen
           user={user}
           onBack={handleBackFromSettings}
+          onLanguagesUpdated={(languages) => setUser({...user, preferredLanguages: languages})}
         />
         <StatusBar style="light" />
       </>
     );
   }
 
-  // Si se está viendo un perfil
   if (viewingUserId) {
     return (
       <>
@@ -141,7 +138,6 @@ export default function App() {
     );
   }
 
-  // Si se está editando perfil
   if (showEditProfile) {
     return (
       <>
@@ -155,7 +151,6 @@ export default function App() {
     );
   }
 
-  // Si hay un libro seleccionado, mostrar detalles
   if (selectedBook) {
     return (
       <>
@@ -170,7 +165,6 @@ export default function App() {
     );
   }
 
-  // Mostrar pantalla principal
   return (
     <>
       <HomeScreen

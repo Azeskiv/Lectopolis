@@ -1,4 +1,5 @@
 using backend.Data;
+using backend.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
@@ -14,6 +15,10 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddHttpClient();
+
+builder.Services.AddScoped<GoogleBooksService>();
+builder.Services.AddScoped<GroqAIService>();
+builder.Services.AddScoped<RecommendationService>();
 
 // Configuración de JWT
 var jwtSettings = builder.Configuration.GetSection("Jwt");

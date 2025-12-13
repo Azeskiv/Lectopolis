@@ -1,0 +1,97 @@
+import { StyleSheet } from 'react-native';
+
+export const homeStyles = StyleSheet.create({
+  settingsButton: {
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    paddingHorizontal: 12,
+    paddingVertical: 10,
+    borderRadius: 8,
+  },
+  settingsText: {
+    fontSize: 22,
+  },
+  logoutButton: {
+    backgroundColor: 'rgba(255,255,255,0.25)',
+    paddingHorizontal: 18,
+    paddingVertical: 10,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.3)',
+  },
+  logoutText: {
+    color: '#FFF',
+    fontWeight: '700',
+    fontSize: 15,
+  },
+  searchContainer: {
+    flexDirection: 'row',
+    padding: 18,
+    // 'gap' is not supported reliably across RN versions; use explicit margins
+    backgroundColor: '#FFF9E6',
+    borderBottomWidth: 1,
+    borderBottomColor: '#E8DCC4',
+  },
+  searchInput: {
+    flex: 1,
+    backgroundColor: '#FFF',
+    padding: 15,
+    borderRadius: 12,
+    fontSize: 17,
+    borderWidth: 2,
+    borderColor: '#D4AF37',
+    marginRight: 12,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.08,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  searchButton: {
+    backgroundColor: '#8B4513',
+    paddingHorizontal: 25,
+    borderRadius: 12,
+    justifyContent: 'center',
+    minWidth: 90,
+    shadowColor: '#8B4513',
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.3,
+    shadowRadius: 5,
+    elevation: 5,
+  },
+  searchButtonText: {
+    color: '#FFF',
+    fontWeight: '700',
+    textAlign: 'center',
+    fontSize: 16,
+  },
+  listContainer: {
+    padding: 18,
+  },
+  /* empty state moved to commonStyles and EmptyState component */
+  recommendationsButton: {
+    backgroundColor: '#D4AF37',
+    marginHorizontal: 20,
+    marginTop: 15,
+    marginBottom: 15,
+    padding: 16,
+    borderRadius: 12,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: '#8B4513',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 6,
+    elevation: 5,
+  },
+  recommendationsEmoji: {
+    fontSize: 22,
+    marginRight: 10,
+  },
+  recommendationsText: {
+    color: '#FFF',
+    fontSize: 17,
+    fontWeight: '700',
+    letterSpacing: 0.5,
+  },
+});

@@ -18,15 +18,11 @@ namespace backend.Controllers
             _context = context;
         }
 
-        // POST: api/ratings - Crear valoración
         [HttpPost]
         [Authorize]
         public async Task<IActionResult> CreateRating([FromBody] RatingRequest request)
         {
-            // Obtener userId del token JWT
             var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value!);
-
-            // Verificar si ya valoró este libro
             var existingRating = await _context.Ratings
                 .FirstOrDefaultAsync(r => r.BookId == request.BookId && r.UserId == userId);
 
@@ -36,7 +32,7 @@ namespace backend.Controllers
             var rating = new Rating
             {
                 BookId = request.BookId,
-                UserId = userId, // Extraído del token, no del request
+                UserId = userId,
                 Score = request.Score,
                 Comment = request.Comment,
                 CreatedAt = DateTime.UtcNow
@@ -48,7 +44,6 @@ namespace backend.Controllers
             return Ok(new { message = "Valoración creada correctamente", rating });
         }
 
-        // GET: api/ratings/{bookId} - Obtener valoraciones de un libro (público)
         [HttpGet("{bookId}")]
         public async Task<IActionResult> GetRatings(string bookId)
         {
@@ -79,7 +74,6 @@ namespace backend.Controllers
             });
         }
 
-        // PUT: api/ratings/{id} - Actualizar valoración (solo el dueño)
         [HttpPut("{id}")]
         [Authorize]
         public async Task<IActionResult> UpdateRating(int id, [FromBody] UpdateRatingRequest request)
@@ -90,7 +84,6 @@ namespace backend.Controllers
             if (rating == null)
                 return NotFound("Valoración no encontrada.");
 
-            // Verificar que el usuario sea el dueño de la valoración
             if (rating.UserId != userId)
                 return Forbid("No tienes permiso para editar esta valoración.");
 
@@ -102,7 +95,6 @@ namespace backend.Controllers
             return Ok(new { message = "Valoración actualizada correctamente", rating });
         }
 
-        // DELETE: api/ratings/{id} - Eliminar valoración (solo el dueño)
         [HttpDelete("{id}")]
         [Authorize]
         public async Task<IActionResult> DeleteRating(int id)
@@ -113,7 +105,6 @@ namespace backend.Controllers
             if (rating == null)
                 return NotFound("Valoración no encontrada.");
 
-            // Verificar que el usuario sea el dueño de la valoración
             if (rating.UserId != userId)
                 return Forbid("No tienes permiso para eliminar esta valoración.");
 
@@ -124,11 +115,9 @@ namespace backend.Controllers
         }
     }
 
-    // DTOs
     public class RatingRequest
     {
         public string BookId { get; set; } = string.Empty;
-        // UserId ya no viene del request, se extrae del token
         public int Score { get; set; }
         public string? Comment { get; set; }
     }
