@@ -1,9 +1,9 @@
 import { StyleSheet } from 'react-native';
 
 export const colors = {
-  primary: '#8B4513',    
-  secondary: '#D4AF37',   
-  background: '#F8F4E8',   
+  primary: '#8B4513',
+  secondary: '#D4AF37',
+  background: '#F8F4E8',
   cardBackground: '#FFF',
   text: '#2C1810',
   textSecondary: '#5A4A3A',
@@ -12,6 +12,13 @@ export const colors = {
   error: '#D32F2F',
   success: '#388E3C',
   star: '#FFD700',
+  white: '#FFFFFF',
+  beige: '#E8DCC4',
+  mutedBackground: '#FFF9E6',
+  danger: '#C44536',
+  deepBlue: '#0B5FFF',
+  lightBlue: '#60B0FF',
+  paleBlue: '#F0F6FB',
 };
 
 export const commonStyles = StyleSheet.create({
@@ -134,3 +141,69 @@ export const commonStyles = StyleSheet.create({
     lineHeight: 24,
   },
 });
+
+// Lightweight, plain JS fragments you can spread into StyleSheet.create
+const _shadows = {
+  small: {
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.06,
+    shadowRadius: 3,
+    elevation: 1,
+  },
+  medium: {
+    shadowColor: '#8B4513',
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.12,
+    shadowRadius: 6,
+    elevation: 4,
+  },
+  large: {
+    shadowColor: '#8B4513',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.15,
+    shadowRadius: 8,
+    elevation: 5,
+  },
+};
+
+export const fragments = {
+  shadows: _shadows,
+  card: {
+    backgroundColor: colors.cardBackground,
+    borderRadius: 12,
+    padding: 16,
+    marginBottom: 16,
+    ..._shadows.small,
+  },
+  section: {
+    backgroundColor: colors.cardBackground,
+    borderRadius: 12,
+    padding: 16,
+    marginBottom: 16,
+    ..._shadows.medium,
+  },
+  leftAccent: (color = colors.secondary, width = 4) => ({ borderLeftWidth: width, borderLeftColor: color }),
+  buttonPrimary: {
+    backgroundColor: colors.primary,
+    paddingVertical: 14,
+    borderRadius: 12,
+    alignItems: 'center',
+    shadowColor: colors.primary,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 6,
+    elevation: 5,
+  },
+  badge: {
+    backgroundColor: colors.secondary,
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 12,
+    alignSelf: 'flex-start',
+  },
+  typography: {
+    title: { fontSize: 20, fontWeight: 'bold', color: colors.primary },
+    subtitle: { fontSize: 15, color: colors.textLight },
+  },
+};

@@ -1,255 +1,104 @@
 import { StyleSheet } from 'react-native';
+import { colors, fragments } from './commonStyles';
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#F8F4E8',
-  },
+  container: { flex: 1, backgroundColor: colors.background },
+
+  /* Main book block */
   bookContainer: {
     flexDirection: 'row',
-    backgroundColor: '#FFF',
+    ...fragments.card,
     padding: 25,
     margin: 15,
     borderRadius: 15,
-    shadowColor: '#8B4513',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.15,
-    shadowRadius: 8,
-    elevation: 5,
     borderLeftWidth: 5,
-    borderLeftColor: '#D4AF37',
+    ...fragments.leftAccent(),
   },
   bookImage: {
     width: 130,
     height: 195,
     borderRadius: 10,
-    backgroundColor: '#E8DCC4',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 3 },
-    shadowOpacity: 0.25,
-    shadowRadius: 5,
-    elevation: 4,
+    backgroundColor: colors.beige,
+    ...fragments.shadows.medium,
   },
-  bookInfo: {
-    flex: 1,
-    marginLeft: 20,
-    justifyContent: 'center',
-  },
-  bookTitle: {
-    fontSize: 22,
-    fontWeight: 'bold',
-    marginBottom: 12,
-    color: '#4A3728',
-    lineHeight: 28,
-  },
-  bookAuthor: {
-    fontSize: 17,
-    color: '#8B6F47',
-    marginBottom: 20,
-    fontStyle: 'italic',
-  },
+
+  /* Info */
+  bookInfo: { flex: 1, marginLeft: 20, justifyContent: 'center' },
+  bookTitle: { fontSize: 22, fontWeight: '700', marginBottom: 12, color: colors.text, lineHeight: 28 },
+  bookAuthor: { fontSize: 17, color: colors.textLight, marginBottom: 20, fontStyle: 'italic' },
+
+  /* Rating */
   ratingContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FFF9E6',
+    backgroundColor: colors.mutedBackground,
     paddingVertical: 8,
     paddingHorizontal: 15,
     borderRadius: 25,
     alignSelf: 'flex-start',
   },
-  star: {
-    fontSize: 22,
-    marginRight: 6,
-  },
-  averageText: {
-    fontSize: 22,
-    fontWeight: 'bold',
-    color: '#D4AF37',
-  },
-  ratingCount: {
-    fontSize: 16,
-    color: '#A0826D',
-    marginLeft: 8,
-  },
-  section: {
-    backgroundColor: '#FFF',
-    padding: 25,
-    marginHorizontal: 15,
-    marginTop: 15,
-    borderRadius: 15,
-    shadowColor: '#8B4513',
-    shadowOffset: { width: 0, height: 3 },
-    shadowOpacity: 0.1,
-    shadowRadius: 6,
-    elevation: 4,
-  },
+  star: { fontSize: 22, marginRight: 6 },
+  averageText: { fontSize: 22, fontWeight: '700', color: colors.secondary },
+  ratingCount: { fontSize: 16, color: colors.textLight, marginLeft: 8 },
+
+  /* Sections */
+  section: { ...fragments.section, padding: 25, marginHorizontal: 15, marginTop: 15, borderRadius: 15 },
   sectionTitle: {
     fontSize: 20,
-    fontWeight: 'bold',
+    fontWeight: '700',
     marginBottom: 18,
-    color: '#8B4513',
+    color: colors.primary,
     borderBottomWidth: 2,
-    borderBottomColor: '#D4AF37',
+    borderBottomColor: colors.secondary,
     paddingBottom: 10,
   },
-  synopsis: {
-    fontSize: 16,
-    lineHeight: 25,
-    color: '#5A4A3A',
-  },
-  ratingForm: {
-    marginTop: 15,
-  },
-  label: {
-    fontSize: 17,
-    fontWeight: '700',
-    marginBottom: 12,
-    color: '#8B4513',
-  },
-  starsRow: {
-    flexDirection: 'row',
-    marginBottom: 25,
-    justifyContent: 'center',
-  },
-  starButton: {
-    fontSize: 45,
-    marginHorizontal: 3,
-  },
-  starDisplay: {
-    fontSize: 32,
-    marginRight: 5,
-  },
+  synopsis: { fontSize: 16, lineHeight: 25, color: colors.textSecondary },
+
+  /* Form */
+  ratingForm: { marginTop: 15 },
+  label: { fontSize: 17, fontWeight: '700', marginBottom: 12, color: colors.primary },
+  starsRow: { flexDirection: 'row', marginBottom: 25, justifyContent: 'center' },
+  starButton: { fontSize: 45, marginHorizontal: 3 },
+  starDisplay: { fontSize: 32, marginRight: 5 },
   commentInput: {
-    backgroundColor: '#FFF9E6',
+    backgroundColor: colors.mutedBackground,
     borderWidth: 2,
-    borderColor: '#D4AF37',
+    borderColor: colors.secondary,
     borderRadius: 12,
     padding: 18,
     fontSize: 16,
     height: 120,
     textAlignVertical: 'top',
     marginBottom: 20,
-    color: '#4A3728',
+    color: colors.text,
   },
-  submitButton: {
-    backgroundColor: '#8B4513',
-    padding: 18,
-    borderRadius: 12,
-    alignItems: 'center',
-    shadowColor: '#8B4513',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 6,
-    elevation: 6,
-  },
-  submitButtonText: {
-    color: '#FFF',
-    fontSize: 18,
-    fontWeight: '700',
-    letterSpacing: 0.5,
-  },
-  cancelButton: {
-    marginTop: 12,
-    padding: 15,
-    alignItems: 'center',
-  },
-  cancelButtonText: {
-    color: '#8B4513',
-    fontSize: 17,
-    fontWeight: '600',
-  },
-  userRatingCard: {
-    backgroundColor: '#FFF9E6',
-    padding: 20,
-    borderRadius: 12,
-    marginTop: 15,
-    borderLeftWidth: 4,
-    borderLeftColor: '#D4AF37',
-  },
-  userComment: {
-    fontSize: 16,
-    color: '#5A4A3A',
-    marginTop: 12,
-    marginBottom: 18,
-    lineHeight: 24,
-  },
-  actionsRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  editButton: {
-    flex: 1,
-    backgroundColor: '#8B4513',
-    padding: 12,
-    borderRadius: 8,
-    alignItems: 'center',
-  },
-  editButtonText: {
-    color: '#FFF',
-    fontWeight: '700',
-    fontSize: 15,
-  },
-  deleteButton: {
-    flex: 1,
-    backgroundColor: '#C44536',
-    padding: 12,
-    borderRadius: 8,
-    alignItems: 'center',
-  },
-  deleteButtonText: {
-    color: '#FFF',
-    fontWeight: '700',
-    fontSize: 15,
-  },
-  ratingCard: {
-    backgroundColor: '#FFF',
-    padding: 20,
-    borderRadius: 12,
-    marginBottom: 15,
-    borderWidth: 1,
-    borderColor: '#E8DCC4',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.08,
-    shadowRadius: 4,
-    elevation: 3,
-  },
-  ratingHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 12,
-  },
-  ratingUser: {
-    fontSize: 17,
-    fontWeight: '700',
-    color: '#8B4513',
-    textDecorationLine: 'underline',
-  },
-  starsRowSmall: {
-    flexDirection: 'row',
-  },
-  starSmall: {
-    fontSize: 16,
-  },
-  ratingComment: {
-    fontSize: 16,
-    color: '#5A4A3A',
-    marginBottom: 12,
-    lineHeight: 24,
-  },
-  ratingDate: {
-    fontSize: 13,
-    color: '#A0826D',
-    fontStyle: 'italic',
-  },
-  noRatings: {
-    textAlign: 'center',
-    color: '#A0826D',
-    fontSize: 17,
-    padding: 30,
-    fontStyle: 'italic',
-  },
+
+  /* Buttons */
+  submitButton: { ...fragments.buttonPrimary, padding: 18, borderRadius: 12, alignItems: 'center' },
+  submitButtonText: { color: colors.white, fontSize: 18, fontWeight: '700', letterSpacing: 0.5 },
+  cancelButton: { marginTop: 12, padding: 15, alignItems: 'center' },
+  cancelButtonText: { color: colors.primary, fontSize: 17, fontWeight: '600' },
+
+  /* User rating */
+  userRatingCard: { backgroundColor: colors.mutedBackground, padding: 20, borderRadius: 12, marginTop: 15, borderLeftWidth: 4, ...fragments.leftAccent() },
+  userComment: { fontSize: 16, color: colors.textSecondary, marginTop: 12, marginBottom: 18, lineHeight: 24 },
+
+  /* Actions */
+  actionsRow: { flexDirection: 'row', justifyContent: 'space-between' },
+  editButton: { flex: 1, ...fragments.buttonPrimary, padding: 12, borderRadius: 8, alignItems: 'center' },
+  editButtonText: { color: colors.white, fontWeight: '700', fontSize: 15 },
+  deleteButton: { flex: 1, backgroundColor: colors.danger, padding: 12, borderRadius: 8, alignItems: 'center' },
+  deleteButtonText: { color: colors.white, fontWeight: '700', fontSize: 15 },
+
+  /* Rating cards */
+  ratingCard: { backgroundColor: colors.cardBackground, padding: 20, borderRadius: 12, marginBottom: 15, borderWidth: 1, borderColor: colors.beige, ...fragments.shadows.small },
+  ratingHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 },
+  ratingUser: { fontSize: 17, fontWeight: '700', color: colors.primary, textDecorationLine: 'underline' },
+  starsRowSmall: { flexDirection: 'row' },
+  starSmall: { fontSize: 16 },
+  ratingComment: { fontSize: 16, color: colors.textSecondary, marginBottom: 12, lineHeight: 24 },
+  ratingDate: { fontSize: 13, color: colors.textLight, fontStyle: 'italic' },
+  noRatings: { textAlign: 'center', color: colors.textLight, fontSize: 17, padding: 30, fontStyle: 'italic' },
 });
 
 export default styles;
